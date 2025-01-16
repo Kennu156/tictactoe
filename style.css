@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#game-board {
+    cursor: default;
+    font-family: sans-serif;
+    display: grid;
+    grid-gap: 4px;
+    grid-template-columns: repeat(3, 128px);
+    grid-template-rows: repeat(3, 128px);
+}
+
+.cell {
+    border: 4px solid black;
+    height: 128px;
+    width: 128px;
+    font-size: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:hover {
+    background-color: #EEEEEE;
+}
+
+.cell.winning {
+    color: red;
+}
+
+#reset-game {
+    margin-top: 2rem;
+    
+}
