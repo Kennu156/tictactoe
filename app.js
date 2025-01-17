@@ -1,11 +1,13 @@
-const cellDivs = Array.from(document.getElementsByClassName('cell'));
-
+const gameBoardDiv = document.getElementById('game-board');
 const messageDiv = document.getElementById('message');
-const resetBtn = document.getElementById('reset-game')
+const resetBtn = document.getElementById('reset-game');
 
-let symbols = ['X', 'Y'];
+const gameBoardSize = 3;
 
-let nextPlayer, playerWon, moveCount;
+let nextPlayer, playerWon, moveCount, gameState;
+
+let symbols = ['X', 'O'];
+
 
 initGame();
 
@@ -20,61 +22,63 @@ const winningCombinations = [
     ['02', '11', '20']  
 ];
 
-let gameState = [[], []];
 
-cellDivs.forEach( cellDiv => {
-    
-    cellDiv.addEventListener('click', e => {
 
-        if ( !e.target.innerText && !playerWon ) {
 
-            moveCount++;
-
-            const move = e.target.dataset.y + e.target.dataset.x;
-            gameState[nextPlayer].push(move);
-
-            e.target.innerText = symbols[nextPlayer];
-
-            if ( hasPlayerWon(gameState[nextPlayer]) ) {
-                playerWon = true;
-                messageDiv.innerText = `${symbols[nextPlayer]} VÕITIS MÄNGU!`;
-            } else if ( moveCount == 9 ) {
-                messageDiv.innerText = `MÄNG LÄBI, VIIK!`
-            }
-
-            nextPlayer = Number(!nextPlayer);
-
-        }
-
-    });
-
-});
 resetBtn.addEventListener('click', e => {
-    initGame()
-})
+    initGame();
+});
 
-function initGame() {
+function initGame () {
 
     nextPlayer = 0;
     playerWon = false;
     moveCount = 0;
+    gameState = [[], []];
 
-    // <div class="cell" data-y="2" data-x="2"></div>
+    initGameBoard()
+    
+};
 
-    for ( let i = 0; y < size; y++ ){
+function initGameBoard() {
 
-        const tr = document.createElement('tr')
-        for ( let x = 0; x < size; x++){
+    gameBoardDiv.innerHTML = '';
+    messageDiv.innerHTML = '';
 
-            const tr = document.createElement('tr')
-            td.classList.add('cell')
-            td.dataset.y = y;
+    for ( let y = 0; y < gameBoardSize; y++ ) {
+        for ( let x = 0; x < gameBoardSize; x++) {
+
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('cell');
+            cellDiv.dataset.y = y;
+            cellDiv.dataset.x = x;
+
+            cellDiv.addEventListener('click', e => {
+                if ( !e.target.innerText && !playerWon ) {
+
+                    moveCount++;
+        
+                    const move = e.target.dataset.y + e.target.dataset.x;
+                    gameState[nextPlayer].push(move);
+
+                    e.target.innerText = symbols[nextPlayer];
+
+                    if ( hasPlayerWon(gameState[nextPlayer]) ) {
+                        playerWon = true;
+                        messageDiv.innerText = `${symbols[nextPlayer]} VÕITIS MÄNGU!`;
+                    } else if ( moveCount == 9 ) {
+                        messageDiv.innerText = `MÄNG LÄBI, VIIK!`;
+                    }
+        
+                    nextPlayer = Number(!nextPlayer);
+                }
+            });
+
+            gameBoardDiv.appendChild(cellDiv)
 
         }
     }
-
-
-};
+}
 
 function hasPlayerWon ( moves ) {
 
@@ -83,11 +87,11 @@ function hasPlayerWon ( moves ) {
     winningCombinations.forEach( c => {
         if ( c.every(m => moves.includes(m)) ) {
             hasPlayerWon = true;
-
+            
             c.forEach( ([y, x]) => {
-                console.log(y, x);
                 document.querySelector(`.cell[data-y="${y}"][data-x="${x}"]`).classList.add('winning');
             });
+
         }
     });
     
