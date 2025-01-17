@@ -3,50 +3,74 @@ const messageDiv = document.getElementById('message');
 const resetBtn = document.getElementById('reset-game');
 
 const gameBoardSize = 3;
+const symbols = ['X', 'O'];
 
-let nextPlayer, playerWon, moveCount, gameState;
+let nextPlayer, playerWon, moveCount, gameState, winningCombinations; 
 
-let symbols = ['X', 'O'];
-
+initWinningCombinations();
 
 initGame();
-
-const winningCombinations = [
-    ['00', '01', '02'],
-    ['10', '11', '12'],
-    ['20', '21', '22'],
-    ['00', '10', '20'],
-    ['01', '11', '21'],
-    ['02', '12', '22'],
-    ['00', '11', '22'], 
-    ['02', '11', '20']  
-];
-
-
-
 
 resetBtn.addEventListener('click', e => {
     initGame();
 });
 
-function initGame () {
+function initWinningCombinations () {
 
+    winningCombinations = [];
+
+    for ( let i = 0; i < gameBoardSize; i++ ) {
+        
+        let row = [];
+        let col = [];
+        
+        for ( let j = 0; j < gameBoardSize; j++ ) {
+            row.push(`${i}${j}`);
+            col.push(`${j}${i}`);
+        }
+        
+        winningCombinations.push(row);
+        winningCombinations.push(col);
+        
+    }
+    
+    let d1 = [];
+    let d2 = [];
+    
+    for ( let k = 0; k < gameBoardSize; k++ ) {
+        d1.push(`${k}${k}`);
+        d2.push(`${k}${gameBoardSize - 1 - k}`);
+    }
+
+    winningCombinations.push(d1);
+    winningCombinations.push(d2);
+
+    console.log(winningCombinations);
+
+}
+
+function initGame () {
+    
     nextPlayer = 0;
     playerWon = false;
     moveCount = 0;
     gameState = [[], []];
 
-    initGameBoard()
-    
-};
+    initGameBoard();
 
-function initGameBoard() {
+}
+
+function initGameBoard () {
 
     gameBoardDiv.innerHTML = '';
-    messageDiv.innerHTML = '';
+    messageDiv.innerText = '';
+
+    gameBoardDiv.style.gridTemplateColumns = `repeat(${gameBoardSize}, 64px)`;
+    gameBoardDiv.style.gridTemplateRows = `repeat(${gameBoardSize}, 64px)`;
 
     for ( let y = 0; y < gameBoardSize; y++ ) {
-        for ( let x = 0; x < gameBoardSize; x++) {
+
+        for ( let x = 0; x < gameBoardSize; x++ ) {
 
             const cellDiv = document.createElement('div');
             cellDiv.classList.add('cell');
@@ -54,10 +78,11 @@ function initGameBoard() {
             cellDiv.dataset.x = x;
 
             cellDiv.addEventListener('click', e => {
+                
                 if ( !e.target.innerText && !playerWon ) {
 
                     moveCount++;
-        
+
                     const move = e.target.dataset.y + e.target.dataset.x;
                     gameState[nextPlayer].push(move);
 
@@ -66,18 +91,22 @@ function initGameBoard() {
                     if ( hasPlayerWon(gameState[nextPlayer]) ) {
                         playerWon = true;
                         messageDiv.innerText = `${symbols[nextPlayer]} VÕITIS MÄNGU!`;
-                    } else if ( moveCount == 9 ) {
-                        messageDiv.innerText = `MÄNG LÄBI, VIIK!`;
+                    } else if ( moveCount == gameBoardSize ** 2 ) {
+                        messageDiv.innerText = `MÄNG JÄI VIIKI!`;
                     }
         
                     nextPlayer = Number(!nextPlayer);
+
                 }
+
             });
 
-            gameBoardDiv.appendChild(cellDiv)
+            gameBoardDiv.appendChild(cellDiv);
 
         }
+
     }
+    
 }
 
 function hasPlayerWon ( moves ) {

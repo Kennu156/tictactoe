@@ -1,12 +1,5 @@
 body {
     margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom right, #282c34, #3a3f47);
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 .container {
@@ -19,67 +12,39 @@ body {
 
 #game-board {
     cursor: default;
+    font-family: sans-serif;
     display: grid;
-    grid-gap: 8px;
-    grid-template-columns: repeat(3, 128px);
-    grid-template-rows: repeat(3, 128px);
-    background-color: #444c56;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    grid-gap: 2px;
 }
 
 .cell {
-    border: none;
-    height: 128px;
-    width: 128px;
-    font-size: 128px;
+    border: 2px solid black;
+    height: 64px;
+    width: 64px;
+    font-size: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
-    color: #282c34;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .cell:hover {
-    background-color: #61dafb;
-    transform: scale(1);
-    cursor: pointer;
+    background-color: #EEEEEE;
 }
 
 .cell.winning {
-    color: #ff6b6b;
-    background-color: #ffe3e3;
-    transform: scale(1);
+    color: crimson;
 }
 
 #message {
     font-size: 2.4rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: sans-serif;
     font-weight: bold;
     margin-bottom: 1rem;
     height: 3rem;
-    color: #61dafb;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
+    color: cadetblue;
 }
 
 #reset-game {
     margin-top: 2rem;
     font-size: 1.5rem;
-    padding: 0.5rem 2rem;
-    color: #ffffff;
-    background-color: #ff6b6b;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#reset-game:hover {
-    background-color: #ff5252;
-    transform: scale(1.05);
 }
